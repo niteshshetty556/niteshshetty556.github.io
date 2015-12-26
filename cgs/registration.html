@@ -1,0 +1,223 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="http://localhost:81/cgs1/css/style.css">
+        <link rel="stylesheet" href="http://localhost:81/cgs1/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="http://localhost:81/cgs1/bootstrap/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="container">
+                <h1>Welcome</h1>
+                <form class="form-horizontal form-shade">
+                    <div class="form-group">
+                        <label for="text1" class="control-label col-lg-4 col-md-3 col-sm-3 col-xs-12">Name</label>
+                        <div class="col-lg-5 col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="Name" id="name" name="fname">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text1" class="control-label col-lg-4 col-md-3 col-sm-3 col-xs-12 text-center">Email Id</label>
+                        <div class="col-lg-5 col-md-8 col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" id="emailid" placeholder="Email-id" onchange="validateEmail();
+                                    checkEmailId();"/>
+                            <span style="color:red" id="error"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text1" class="control-label col-lg-4 col-md-3 col-sm-3 col-xs-12 text-center">Password</label>
+                        <div class="col-lg-5 col-md-8 col-sm-8 col-xs-12">
+                            <input id="password" name="password" class="form-control" type="password" placeholder="********" onchange="checkPasswordLength()">                                
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text1" class="control-label col-lg-4 col-md-3 col-sm-3 col-xs-12 text-center">Confirm Password</label>
+                        <div class="col-lg-5 col-md-8 col-sm-8 col-xs-12">
+                            <input id="reenterpassword" class="form-control" name="reenterpassword" type="password" placeholder="********"  onchange="checkPasswordMatch()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-9">
+                            <div class="pull-right">
+                                <a href="#" id="save" class="btn btn-primary pull-right">Register</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <ul class="bg-bubbles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+
+        <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
+        <script>
+                                function checkPasswordLength()
+                                {
+                                    document.getElementById('save').setAttribute("disabled", "disabled");
+                                    var passwd = document.getElementById('password').value;
+                                    if (passwd.length < 6) {
+                                        alert("password  must contain atleast 6 characters");
+                                    } else {
+                                        document.getElementById('save').removeAttribute("disabled");
+                                    }
+                                }
+                                function checkPasswordMatch()
+                                {
+                                    var passwd = document.getElementById('password').value;
+                                    var repasswd = document.getElementById('reenterpassword').value;
+                                    if (passwd != repasswd)
+                                    {
+                                        alert("password and re-enter password must match");
+                                    }
+                                }
+
+                                function validateEmail()
+                                {
+                                    var inputvalue = document.getElementById('emailid').value;
+                                    var pattern = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+                                    if (pattern.test(inputvalue)) {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        document.getElementById('emailid').value = '';
+                                        document.getElementById('emailid').focus();
+                                        alert("Enter Valid Email");
+                                    }
+                                }
+
+                                function checkEmailId() {
+                                    document.getElementById('save').setAttribute("disabled", "disabled");
+                                    var txtemail = document.getElementById('emailid').value;
+                                    $.ajax({
+                                        type: "post",
+                                        url: "http://localhost:81/cgs/index.php/registration",
+                                        dataType: "json",
+                                        data: {"method": "checkDuplicateEmail", "emailid": txtemail, "format": "json"},
+                                        success: function(data) {
+                                            if (data == 1) {
+                                                document.getElementById("error").innerHTML = "Emailid Exists!";
+                                                document.getElementById('emailid').innerhtml = "";
+                                                document.getElementById('emailid').value = "";
+                                                document.getElementById('emailid').focus();
+
+                                            } else {
+                                                document.getElementById('save').removeAttribute("disabled");
+                                            }
+
+                                        },
+                                        error: function(e) {
+                                            alert('Error while request....');
+                                            alert(JSON.stringify(e));
+                                        }
+                                    });
+                                }
+
+                                $('#save').click(function(e)
+                                {
+                                    if ($("#name").val().trim() == "")
+                                    {
+                                        $("#name").css({
+                                            "border": "1px solid #d95b44"
+                                        });
+                                        alert("Please Enter Name");
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        $("#name").css({
+                                            "border": "1px solid #cccccc"
+                                        });
+                                    }
+                                    if ($("#emailid").val().trim() == "")
+                                    {
+                                        $("#emailid").css({
+                                            "border": "1px solid #d95b44"
+                                        });
+                                        alert("Please Enter Emailid");
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        $("#emailid").css({
+                                            "border": "1px solid #cccccc"
+                                        });
+                                    }
+                                    if ($("#password").val().trim() == "")
+                                    {
+                                        $("#password").css({
+                                            "border": "1px solid #d95b44"
+                                        });
+                                        alert("Please Enter Password");
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        $("#password").css({
+                                            "border": "1px solid #cccccc"
+                                        });
+                                    }
+                                    if ($("#reenterpassword").val().trim() == "")
+                                    {
+                                        $("#reenterpassword").css({
+                                            "border": "1px solid #d95b44"
+                                        });
+                                        alert("Please Enter Confirm Password")
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        $("#reenterpassword").css({
+                                            "border": "1px solid #cccccc"
+                                        });
+                                        register();
+                                    }
+                                });
+                                function register()
+                                {
+                                    var name = document.getElementById('name').value;
+                                    var emailid = document.getElementById('emailid').value;
+                                    var password = document.getElementById('password').value;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "http://localhost:81/cgs/index.php/registration",
+                                        dataType: "json",
+                                        data: {"method": "register", "name": name, "emailid": emailid, "password": password, "format": "json"},
+                                        success: function(data)
+                                        {
+                                            if (data[0]['result_status'] == 1) {
+                                                alert("success");
+                                                location.href = "http://localhost:81/cgs1/login.html"
+                                            } else {
+                                                alert("Failed To register");
+                                            }
+                                        },
+                                        error: function(e)
+                                        {
+                                            alert(JSON.stringify(e));
+                                            alert("error while request");
+                                        }
+                                    });
+                                }
+
+
+
+
+
+        </script>
+
+    </body>
+</html>
+
+
+

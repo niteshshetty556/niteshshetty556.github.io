@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html >
+    <head>
+        <meta charset="UTF-8">
+        <title>User Login</title>
+        <link rel="stylesheet" href="http://localhost:81/cgs1/css/style.css">
+        <link rel="stylesheet" href="http://localhost:81/cgs1/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="http://localhost:81/cgs1/bootstrap/css/bootstrap.min.css">
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+            <div class="container">
+                <h1>Welcome</h1>
+                <form class="form" id ="userForm" name="userForm" method="post" action="">
+                    <a href="http://localhost:81/cgs1/registration.html" class="center">Create a new account</a><br/><br/>
+                    <input type="text" id="uname" name="uname"  placeholder="Username" />
+                    <input type="password" id="paswd" name="paswd" placeholder="Password" />
+                    <button type="submit" id="usrsubmit">Sign In</button>
+                    <br/><br/>
+                    <a href="#" data-toggle="modal" data-target="#GSCCModal">Forgot Password</a><br/><br/>
+                    <a href="#" data-toggle="modal" data-target="#GSCCModal1">Reset Password</a><br/><br/>
+                    <span id="msgbox" style="color:window;text-align:center;"></span>
+                </form>
+            </div>
+
+            <ul class="bg-bubbles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+        <!--pop up--->
+        <div id="GSCCModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="margin-top:25%;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                        <h4 class="modal-title" id="myModalLabel"><b>Password Details</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-lg-12">
+                            <p>Enter your email address</p>
+                            <div class="form-group">
+                                <input type="text" placeholder="Enter your Email Id" id="email" name="email"  class="form-control" onchange="validateEmail(this);"/>
+                                <span style="color:lightblue" class="center" id="error"></span>
+                            </div>
+                            <div class="form-group">
+                                <a href="#" class="btn btn-primary pull-right" id="send" onclick="javascript:forgotPassword()">Submit</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top:none;">
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div id="GSCCModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="margin-top:25%;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                        <h4 class="modal-title" id="myModalLabel"><b>Reset Your Password</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-lg-12">
+                            <p>Enter Emailid</p>
+                            <div class="form-group">
+                                <input type="text" placeholder="Enter your emailid" id="emailid1" name=""  class="form-control"/>
+                                <span style="color:lightblue" class="center" id="error1"></span>
+                            </div>
+                            <p>Enter Password</p>
+                            <div class="form-group">
+                                <input type="password" placeholder="Enter your Password" id="password" name=""  class="form-control" onchange="checkPasswordLength()"/>
+                                <span style="color:lightblue" class="center" id="error1"></span>
+                            </div>
+                            <p>Confirm Password</p>
+                            <div class="form-group">
+                                <input type="password" placeholder="Confirm Password" id="reenterpassword" name=""  class="form-control" onchange="checkPasswordMatch()"/>
+                                <span style="color:lightblue" class="center" id="error2"></span>
+                            </div>
+                            <div class="form-group">
+                                <a href="#" class="btn btn-primary pull-right" id="save" onclick="javascript:resetPassword()">Submit</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top:none;">
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+        <script src="http://localhost:81/cgs1/js/index.js"></script>
+        <script src="http://localhost:81/cgs1/bootstrap/js/bootstrap.js"></script>
+        <script>
+                                    $(document).ready(function() {
+                                        $("#userForm").submit(function(e)
+                                        {
+                                            var emailid = document.getElementById('uname').value;
+                                            var password = document.getElementById('paswd').value;
+                                            $.ajax(
+                                                    {
+                                                        type: "POST",
+                                                        url: "http://localhost:81/cgs/index.php/registration",
+                                                        dataType: "json",
+                                                        data: {"method": "login", "emailid": emailid, "password": password, "format": "json"},
+                                                        success: function(data)
+                                                        {
+                                                            if (data == 1) {
+                                                                alert("success");
+                                                            }
+                                                            else {
+                                                                alert("incorrect username and password");
+                                                                document.location = 'http://localhost:81/cgs1/login.html';
+                                                            }
+                                                        },
+                                                        error: function(data)
+                                                        {
+
+                                                        }
+                                                    });
+                                            e.preventDefault();    //STOP default action
+                                        });
+                                    });
+                                    function forgotPassword()
+                                    {
+                                        var email = document.getElementById('email').value;
+                                        $.ajax({
+                                            type: "post",
+                                            url: "http://localhost:81/cgs/index.php/registration",
+                                            dataType: "json",
+                                            data: {"method": "forgotPassword", "emailid": email, "format": "json"},
+                                            success: function(data)
+                                            {
+                                                if (data[0]['result_status'] == 1)
+                                                {
+                                                    alert("mail sent successfully");
+                                                    document.location = 'http://localhost:81/cgs1/login.html';
+                                                }
+                                                else
+                                                {
+                                                    alert("emailid doesn't exists");
+                                                    document.location = 'http://localhost:81/cgs1/login.html';
+                                                }
+                                            },
+                                            error: function(e) {
+                                                alert(JSON.stringify(e));
+
+                                            }
+                                        });
+                                    }
+
+                                    function validateEmail(inputvalue)
+                                    {
+                                        var pattern = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+                                        var OK = pattern.test(inputvalue.value);
+                                        if (!OK) {
+
+                                            document.getElementById("error").innerHTML = "Please enter a valid Email Address";
+                                            document.getElementById('email').value = "";
+                                            document.getElementById('email').focus();
+                                        }
+                                        else
+                                        {
+                                            document.getElementById("error").innerHTML = "";
+                                        }
+                                    }
+                                    function checkPasswordLength()
+                                    {
+                                        document.getElementById('save').setAttribute("disabled", "disabled");
+                                        var passwd = document.getElementById('password').value;
+                                        if (passwd.length < 6) {
+                                            alert("password  must contain atleast 6 characters");
+                                        } else {
+                                            document.getElementById('save').removeAttribute("disabled");
+                                        }
+                                    }
+                                    function checkPasswordMatch()
+                                    {
+                                        var passwd = document.getElementById('password').value;
+                                        var repasswd = document.getElementById('reenterpassword').value;
+                                        if (passwd != repasswd)
+                                        {
+                                            alert("password and re-enter password must match");
+                                        }
+                                    }
+
+                                    function resetPassword()
+                                    {
+                                        var emailid = document.getElementById('emailid1').value;
+                                        var password = document.getElementById('password').value;
+                                        $.ajax({
+                                            type: "post",
+                                            url: "http://localhost:81/cgs/index.php/registration",
+                                            dataType: "json",
+                                            data: {"method": "resetPassword", "emailid": emailid, "password": password, "format": "json"},
+                                            success: function(data)
+                                            {
+                                                if (data == 1)
+                                                {
+                                                    alert("password changed successfully");
+                                                    document.location = 'http://localhost:81/cgs1/login.html';
+                                                }
+                                                else
+                                                {
+                                                    alert("Failed to reset password");
+                                                    document.location = 'http://localhost:81/cgs1/login.html';
+                                                }
+                                            },
+                                            error: function(e) {
+                                                alert(JSON.stringify(e));
+
+                                            }
+                                        });
+                                    }
+        </script>
+    </body>
+</html>
