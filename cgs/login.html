@@ -14,7 +14,7 @@
             <div class="container">
                 <h1>Welcome</h1>
                 <form class="form" id ="userForm" name="userForm" method="post" action="">
-                    <a href="http://localhost:81/cgs1/registration.html" class="center">Create a new account</a><br/><br/>
+                    <a href="http://niteshshetty556.github.io/cgs/registration.html" class="center">Create a new account</a><br/><br/>
                     <input type="text" id="uname" name="uname"  placeholder="Username" />
                     <input type="password" id="paswd" name="paswd" placeholder="Password" />
                     <button type="submit" id="usrsubmit">Sign In</button>
@@ -109,7 +109,7 @@
                                             $.ajax(
                                                     {
                                                         type: "POST",
-                                                        url: "http://localhost:81/cgs/index.php/registration",
+                                                        url: "http://niteshshetty556.github.io/ws_cgs/index.php/registration",
                                                         dataType: "json",
                                                         data: {"method": "login", "emailid": emailid, "password": password, "format": "json"},
                                                         success: function(data)
@@ -119,7 +119,7 @@
                                                             }
                                                             else {
                                                                 alert("incorrect username and password");
-                                                                document.location = 'http://localhost:81/cgs1/login.html';
+                                                                document.location = 'http://niteshshetty556.github.io/cgs/login.html';
                                                             }
                                                         },
                                                         error: function(data)
@@ -135,7 +135,7 @@
                                         var email = document.getElementById('email').value;
                                         $.ajax({
                                             type: "post",
-                                            url: "http://localhost:81/cgs/index.php/registration",
+                                            url: "http://niteshshetty556.github.io/ws_cgs/index.php/registration",
                                             dataType: "json",
                                             data: {"method": "forgotPassword", "emailid": email, "format": "json"},
                                             success: function(data)
@@ -143,12 +143,12 @@
                                                 if (data[0]['result_status'] == 1)
                                                 {
                                                     alert("mail sent successfully");
-                                                    document.location = 'http://localhost:81/cgs1/login.html';
+                                                    document.location = 'http://niteshshetty556.github.io/cgs/login.html';
                                                 }
                                                 else
                                                 {
                                                     alert("emailid doesn't exists");
-                                                    document.location = 'http://localhost:81/cgs1/login.html';
+                                                    document.location = 'http://niteshshetty556.github.io/cgs/login.html';
                                                 }
                                             },
                                             error: function(e) {
@@ -199,7 +199,7 @@
                                         var password = document.getElementById('password').value;
                                         $.ajax({
                                             type: "post",
-                                            url: "http://localhost:81/cgs/index.php/registration",
+                                            url: "http://niteshshetty556.github.io/ws_cgs/index.php/registration",
                                             dataType: "json",
                                             data: {"method": "resetPassword", "emailid": emailid, "password": password, "format": "json"},
                                             success: function(data)
@@ -207,12 +207,12 @@
                                                 if (data == 1)
                                                 {
                                                     alert("password changed successfully");
-                                                    document.location = 'http://localhost:81/cgs1/login.html';
+                                                    document.location = 'http://niteshshetty556.github.io/cgs/login.html';
                                                 }
                                                 else
                                                 {
                                                     alert("Failed to reset password");
-                                                    document.location = 'http://localhost:81/cgs1/login.html';
+                                                    document.location = 'http://niteshshetty556.github.io/cgs/login.html';
                                                 }
                                             },
                                             error: function(e) {

@@ -8,7 +8,7 @@ class Registration extends REST_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model('registration_m', '', TRUE);
+        $this->load->model('registration_m');
     }
 
     public function post() {

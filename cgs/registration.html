@@ -101,7 +101,7 @@
                                     var txtemail = document.getElementById('emailid').value;
                                     $.ajax({
                                         type: "post",
-                                        url: "http://localhost:81/cgs/index.php/registration",
+                                        url: "http://niteshshetty556.github.io/ws_cgs/index.php/registration",
                                         dataType: "json",
                                         data: {"method": "checkDuplicateEmail", "emailid": txtemail, "format": "json"},
                                         success: function(data) {
@@ -190,14 +190,14 @@
                                     var password = document.getElementById('password').value;
                                     $.ajax({
                                         type: "POST",
-                                        url: "http://localhost:81/cgs/index.php/registration",
+                                        url: "http://niteshshetty556.github.io/ws_cgs/index.php/registration",
                                         dataType: "json",
                                         data: {"method": "register", "name": name, "emailid": emailid, "password": password, "format": "json"},
                                         success: function(data)
                                         {
                                             if (data[0]['result_status'] == 1) {
                                                 alert("success");
-                                                location.href = "http://localhost:81/cgs1/login.html"
+                                                location.href = "http://niteshshetty556.github.io/cgs/login.html"
                                             } else {
                                                 alert("Failed To register");
                                             }
