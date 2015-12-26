@@ -71,8 +71,8 @@ class Registration extends REST_Controller {
         $config['smtp_host'] = 'ssl://smtp.googlemail.com';
         $config['smtp_port'] = '465';
         $config['smtp_timeout'] = '5';
-        $config['smtp_user'] = 'nshetty556@gmail.com';
-        $config['smtp_pass'] = 'nitesh92';
+        $config['smtp_user'] = '//emailid';
+        $config['smtp_pass'] = '//password';
         $config['charset'] = 'utf-8';
         $config['newline'] = "\r\n";
         $config['mailtype'] = 'text'; // or text
