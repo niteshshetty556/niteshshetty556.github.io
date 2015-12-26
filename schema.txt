@@ -1,0 +1,97 @@
+-- phpMyAdmin SQL Dump
+-- version 3.5.5
+-- http://www.phpmyadmin.net
+--
+-- Host: sql6.freemysqlhosting.net
+-- Generation Time: Dec 26, 2015 at 01:19 PM
+-- Server version: 5.5.46-0ubuntu0.14.04.2
+-- PHP Version: 5.3.28
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `sql6101012`
+--
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`sql6101012`@`%` PROCEDURE `sp_forgot_password`(IN `pemailid` varchar(200))
+Begin
+ 
+SET @passwrd='';
+       
+ SELECT  
+ concat( substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(@seed:=round(rand(TO_SECONDS(now()))*4294967296))*36+1, 1), substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1), substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1), substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1), substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1), substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1), substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1), substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', rand(@seed)*36+1, 1) )
+t into @passwrd; 
+
+update user_details 
+set password = @passwrd
+where emailid = pemailid;
+
+select @passwrd password,'success' message,true result_status;
+
+end$$
+
+CREATE DEFINER=`sql6101012`@`%` PROCEDURE `sp_login`(IN `puname` VARCHAR(100), IN `ppswd` VARCHAR(50))
+BEGIN
+
+SET @userid=0;
+       
+SELECT  userid into @userid  from user_details where emailid=puname and password = ppswd and status = 1;
+
+
+if @userid > 0 THEN
+
+select  *,'' message, true result_status
+from user_details 
+WHERE userid = @userid and status=1;
+END IF;
+    
+END$$
+
+CREATE DEFINER=`sql6101012`@`%` PROCEDURE `sp_register_user`(IN `pname` VARCHAR(50),IN `pemailid` VARCHAR(50),IN `ppwd` VARCHAR(30))
+BEGIN
+insert into user_details(name,emailid,password,status) values(pname,pemailid,ppwd,1);
+Select 'success' message, true result_status;
+END$$
+
+CREATE DEFINER=`sql6101012`@`%` PROCEDURE `sp_reset_password`(IN `pemailid` varchar(200),IN `ppwd` VARCHAR(100))
+Begin
+ set sql_safe_updates=0;
+update user_details 
+set password = ppwd
+where emailid = pemailid;
+
+select 'success' message,true result_status;
+
+end$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_details`
+--
+
+CREATE TABLE IF NOT EXISTS `user_details` (
+  `userid` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `emailid` varchar(50) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `status` int(10) DEFAULT NULL,
+  PRIMARY KEY (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
